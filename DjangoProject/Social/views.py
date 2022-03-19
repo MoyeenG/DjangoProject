@@ -1,4 +1,5 @@
-
+from email.utils import parsedate_to_datetime
+from django.utils.dateparse import parse_date
 from django.views import View
 from .models import FacebookPosts
 from django.shortcuts import render
@@ -9,7 +10,7 @@ import json
 class DisplayPosts(View):
     def get(self,request):
         
-        exchange_token = 'EAAHst9r8iOQBAF5aaiBAe47iIwB4XFS36LZAOZBXDhwE7l9fhZCcMsOSeQeyCzQo2URZChKDHj9HBjBZBfHvfoB8KiqKUrS5CtZADZCZAJEMifqEW6ABm8UiXXHBLUDN9KrIOL4lo9mN2MMjckDcfbhj8JBqBeUQ8IEZCAMTseZA7WfH7m4ziSGOGtysZAl7mJygZAqsHd5B9YnoIbHZCYXkjDoHTldbXSKaksS4ZD'
+        exchange_token = 'EAAHst9r8iOQBAKUwNZAqE2GXjgcOvle6VVwIJmeM5LTwwuSFGNi3Eg6R58ZA8DdBZATcJZBSxpiFHFHxbZCTfLkt69rTuZCzdP2MmkWkwReDZAgMXGxWEUMmZAGj9iHeAcEIk9itBRD0Ks5zjce9JRj4KdTFAOnqal0vDbFdwv5glnMWXJ18BXC9EYZCXGZB5sZANTd709aSqB30aOTPaDmlpHMfqrGSZBq1QfAZD'
         #template_name ='fb_table.html'
         response1 = requests.get("https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=541749373864164&client_secret=0492ef6f4cc4f745b8dcc688cffd6cbd&fb_exchange_token={}".format(exchange_token))
         long_token1 = json.loads(response1.text)
@@ -19,15 +20,15 @@ class DisplayPosts(View):
         long_token2 = json.loads(response2.text)
         PageAccessToken = long_token2['access_token']
 
-        post_data = requests.get("https://graph.facebook.com/v13.0/{}/feed?fields=message&access_token={}".format(page_id,PageAccessToken))
-        rating = requests.get("https://graph.facebook.com/v13.0/{}/ratings?access_token={}".format(page_id,PageAccessToken))
-        
+        post_data = requests.get("https://graph.facebook.com/v13.0/{}/feed?access_token={}".format(page_id,PageAccessToken))
+        rating = requests.get("https://graph.facebook.com/v13.0/{}/ratings?fields=review_text&access_token={}".format(page_id,PageAccessToken))
         data = json.loads(post_data.text)
+        print(rating.text)
         for datum in data['data']:
             obj = FacebookPosts()
             obj.post_data = datum['message']
-            #obj.post_date = datum['created_time']
-            
+            obj.post_date = datum['created_time']
+           
             obj.save()
 
         
