@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-import os
+#import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -24,6 +24,7 @@ SECRET_KEY = 'django-insecure-ij*da!xwu%732x!wg2uk^0n8k8d@-t3uo+v&#@s6@c&)!&b(m1
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+DEVELOPMENT = True
 
 ALLOWED_HOSTS = []
 
@@ -31,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'gcalendar.apps.GcalendarConfig',
     'Social.apps.SocialConfig',
     'django.contrib.admin',
     'django.contrib.auth',
